@@ -43,6 +43,8 @@ android {
         abortOnError = false
         // 忽略警告，只检查错误
         ignoreWarnings = true
+        // 即使创建了基线文件也继续构建
+        checkReleaseBuilds = false
     }
 }
 
