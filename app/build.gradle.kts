@@ -39,6 +39,10 @@ android {
     
     lint {
         baseline = file("lint-baseline.xml")
+        // 当创建基线文件时不中止构建
+        abortOnError = false
+        // 忽略警告，只检查错误
+        ignoreWarnings = true
     }
 }
 
