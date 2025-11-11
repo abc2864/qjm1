@@ -367,65 +367,64 @@ class MainActivity : AppCompatActivity() {
      */
     private fun showDeleteConfirmationDialog(position: Int) {
         val expressInfo = expressList[position]
-        if (expressInfo != null) {
-            // 创建自定义对话框
-            val dialogView = LayoutInflater.from(this).inflate(R.layout.dialog_delete_confirm, null)
-            val dialog = Dialog(this, R.style.CustomDialog)
-            
-            // 设置对话框内容
-            val titleText = dialogView.findViewById<TextView>(R.id.dialog_title)
-            val messageText = dialogView.findViewById<TextView>(R.id.dialog_message)
-            val cancelButton = dialogView.findViewById<Button>(R.id.btn_cancel)
-            val deleteButton = dialogView.findViewById<Button>(R.id.btn_delete)
-            
-            titleText.text = "确认删除"
-            messageText.text = "确定要删除取件码 ${expressInfo.pickupCode} 吗？"
-            
-            // 设置按钮点击事件
-            cancelButton.setOnClickListener {
-                dialog.dismiss()
-            }
+        // 删除不必要的null检查
+        // 创建自定义对话框
+        val dialogView = LayoutInflater.from(this).inflate(R.layout.dialog_delete_confirm, null)
+        val dialog = Dialog(this, R.style.CustomDialog)
+        
+        // 设置对话框内容
+        val titleText = dialogView.findViewById<TextView>(R.id.dialog_title)
+        val messageText = dialogView.findViewById<TextView>(R.id.dialog_message)
+        val cancelButton = dialogView.findViewById<Button>(R.id.btn_cancel)
+        val deleteButton = dialogView.findViewById<Button>(R.id.btn_delete)
+        
+        titleText.text = "确认删除"
+        messageText.text = "确定要删除取件码 ${expressInfo.pickupCode} 吗？"
+        
+        // 设置按钮点击事件
+        cancelButton.setOnClickListener {
+            dialog.dismiss()
+        }
 
-            deleteButton.setOnClickListener {
-                val pickupCode = expressInfo.pickupCode
-                // 从列表中移除项目
-                expressList.removeAt(position)
-                // 重新刷新列表
-                sortAndRefreshList()
-                
-                // 记录删除状态
-                dataManager.addDeletedItemId(expressInfo.id)
-                
-                // 如果是手动添加的快递信息，则从持久化存储中删除
-                if (expressInfo.smsContent == "手动添加的取件信息") {
-                    dataManager.removeManualExpressInfo(expressInfo.id)
-                }
-                
-                // 更新工具栏标题
-                updateToolbarTitle()
-                
-                Toast.makeText(this, "已删除取件码 $pickupCode", Toast.LENGTH_SHORT).show()
-                dialog.dismiss()
+        deleteButton.setOnClickListener {
+            val pickupCode = expressInfo.pickupCode
+            // 从列表中移除项目
+            expressList.removeAt(position)
+            // 重新刷新列表
+            sortAndRefreshList()
+            
+            // 记录删除状态
+            dataManager.addDeletedItemId(expressInfo.id)
+            
+            // 如果是手动添加的快递信息，则从持久化存储中删除
+            if (expressInfo.smsContent == "手动添加的取件信息") {
+                dataManager.removeManualExpressInfo(expressInfo.id)
             }
             
-            dialog.setContentView(dialogView)
-            dialog.setCancelable(true)
-            dialog.setCanceledOnTouchOutside(true)
+            // 更新工具栏标题
+            updateToolbarTitle()
             
-            // 设置对话框窗口属性
-            val window = dialog.window
-            if (window != null) {
-                val layoutParams = window.attributes
-                layoutParams.width = (resources.displayMetrics.widthPixels * 00.8).toInt() // 宽度为屏幕的80%
-                layoutParams.height = WindowManager.LayoutParams.WRAP_CONTENT
-                window.attributes = layoutParams
-                window.setBackgroundDrawableResource(R.drawable.dialog_rounded_background)
-            }
-            
-            // 确保对话框在当前Activity上下文中正确显示
-            if (!isFinishing) {
-                dialog.show()
-            }
+            Toast.makeText(this, "已删除取件码 $pickupCode", Toast.LENGTH_SHORT).show()
+            dialog.dismiss()
+        }
+        
+        dialog.setContentView(dialogView)
+        dialog.setCancelable(true)
+        dialog.setCanceledOnTouchOutside(true)
+        
+        // 设置对话框窗口属性
+        val window = dialog.window
+        if (window != null) {
+            val layoutParams = window.attributes
+            layoutParams.width = (resources.displayMetrics.widthPixels * 00.8).toInt() // 宽度为屏幕的80%
+            layoutParams.height = WindowManager.LayoutParams.WRAP_CONTENT
+            window.attributes = layoutParams
+            window.setBackgroundDrawableResource(R.drawable.dialog_rounded_background)
+        }
+        
+        // 确保对话框在当前Activity上下文中正确显示
+        if (!isFinishing) {
+            dialog.show()
         }
     }
     
@@ -787,52 +786,51 @@ class MainActivity : AppCompatActivity() {
      */
     private fun showOriginalSms(position: Int) {
         val expressInfo = expressList[position]
-        if (expressInfo != null) {
-            // 创建自定义对话框
-            val dialogView = LayoutInflater.from(this).inflate(R.layout.dialog_original_sms, null)
-            val dialog = Dialog(this, R.style.CustomDialog)
-            
-            // 设置对话框内容
-            val titleText = dialogView.findViewById<TextView>(R.id.dialog_title)
-            val messageText = dialogView.findViewById<TextView>(R.id.dialog_message)
-            val copyButton = dialogView.findViewById<Button>(R.id.btn_copy)
-            val cancelButton = dialogView.findViewById<Button>(R.id.btn_cancel)
-            
-            titleText.text = "原始短信内容"
-            messageText.text = expressInfo.smsContent
-            
-            // 设置按钮点击事件
-            cancelButton.setOnClickListener {
-                dialog.dismiss()
-            }
+        // 删除不必要的null检查
+        // 创建自定义对话框
+        val dialogView = LayoutInflater.from(this).inflate(R.layout.dialog_original_sms, null)
+        val dialog = Dialog(this, R.style.CustomDialog)
+        
+        // 设置对话框内容
+        val titleText = dialogView.findViewById<TextView>(R.id.dialog_title)
+        val messageText = dialogView.findViewById<TextView>(R.id.dialog_message)
+        val copyButton = dialogView.findViewById<Button>(R.id.btn_copy)
+        val cancelButton = dialogView.findViewById<Button>(R.id.btn_cancel)
+        
+        titleText.text = "原始短信内容"
+        messageText.text = expressInfo.smsContent
+        
+        // 设置按钮点击事件
+        cancelButton.setOnClickListener {
+            dialog.dismiss()
+        }
 
-            copyButton.setOnClickListener {
-                val clipboard = getSystemService(Context.CLIPBOARD_SERVICE) as ClipboardManager
-                val clip = ClipData.newPlainText("原始短信", expressInfo.smsContent)
-                clipboard.setPrimaryClip(clip)
-                Toast.makeText(this, "短信内容已复制到剪贴板", Toast.LENGTH_SHORT).show()
-                // 复制后也关闭对话框
-                dialog.dismiss()
-            }
-            
-            dialog.setContentView(dialogView)
-            dialog.setCancelable(true)
-            dialog.setCanceledOnTouchOutside(true)
-            
-            // 设置对话框窗口属性
-            val window = dialog.window
-            if (window != null) {
-                val layoutParams = window.attributes
-                layoutParams.width = (resources.displayMetrics.widthPixels * 0.8).toInt() // 宽度为屏幕的80%
-                layoutParams.height = WindowManager.LayoutParams.WRAP_CONTENT
-                window.attributes = layoutParams
-                window.setBackgroundDrawableResource(R.drawable.dialog_rounded_background)
-            }
-            
-            // 确保对话框在当前Activity上下文中正确显示
-            if (!isFinishing) {
-                dialog.show()
-            }
+        copyButton.setOnClickListener {
+            val clipboard = getSystemService(Context.CLIPBOARD_SERVICE) as ClipboardManager
+            val clip = ClipData.newPlainText("原始短信", expressInfo.smsContent)
+            clipboard.setPrimaryClip(clip)
+            Toast.makeText(this, "短信内容已复制到剪贴板", Toast.LENGTH_SHORT).show()
+            // 复制后也关闭对话框
+            dialog.dismiss()
+        }
+        
+        dialog.setContentView(dialogView)
+        dialog.setCancelable(true)
+        dialog.setCanceledOnTouchOutside(true)
+        
+        // 设置对话框窗口属性
+        val window = dialog.window
+        if (window != null) {
+            val layoutParams = window.attributes
+            layoutParams.width = (resources.displayMetrics.widthPixels * 0.8).toInt() // 宽度为屏幕的80%
+            layoutParams.height = WindowManager.LayoutParams.WRAP_CONTENT
+            window.attributes = layoutParams
+            window.setBackgroundDrawableResource(R.drawable.dialog_rounded_background)
+        }
+        
+        // 确保对话框在当前Activity上下文中正确显示
+        if (!isFinishing) {
+            dialog.show()
         }
     }
     
@@ -887,69 +885,68 @@ class MainActivity : AppCompatActivity() {
      */
     private fun showAddNoteDialog(position: Int) {
         val expressInfo = expressList[position]
-        if (expressInfo != null) {
-            // 创建自定义对话框
-            val dialogView = LayoutInflater.from(this).inflate(R.layout.dialog_add_note, null)
-            val dialog = Dialog(this, R.style.CustomDialog)
-            
-            // 设置对话框内容
-            val titleText = dialogView.findViewById<TextView>(R.id.dialog_title)
-            val messageText = dialogView.findViewById<TextView>(R.id.dialog_message)
-            val noteEditText = dialogView.findViewById<com.google.android.material.textfield.TextInputEditText>(R.id.edit_note)
-            val cancelButton = dialogView.findViewById<Button>(R.id.btn_cancel)
-            val confirmButton = dialogView.findViewById<Button>(R.id.btn_confirm)
-            
-            titleText.text = "添加备注"
-            messageText.text = "为取件码 ${expressInfo.pickupCode} 添加备注"
-            noteEditText.setText(expressInfo.note)
-            
-            // 设置按钮点击事件
-            cancelButton.setOnClickListener {
-                dialog.dismiss()
-            }
+        // 删除不必要的null检查
+        // 创建自定义对话框
+        val dialogView = LayoutInflater.from(this).inflate(R.layout.dialog_add_note, null)
+        val dialog = Dialog(this, R.style.CustomDialog)
+        
+        // 设置对话框内容
+        val titleText = dialogView.findViewById<TextView>(R.id.dialog_title)
+        val messageText = dialogView.findViewById<TextView>(R.id.dialog_message)
+        val noteEditText = dialogView.findViewById<com.google.android.material.textfield.TextInputEditText>(R.id.edit_note)
+        val cancelButton = dialogView.findViewById<Button>(R.id.btn_cancel)
+        val confirmButton = dialogView.findViewById<Button>(R.id.btn_confirm)
+        
+        titleText.text = "添加备注"
+        messageText.text = "为取件码 ${expressInfo.pickupCode} 添加备注"
+        noteEditText.setText(expressInfo.note)
+        
+        // 设置按钮点击事件
+        cancelButton.setOnClickListener {
+            dialog.dismiss()
+        }
 
-            confirmButton.setOnClickListener {
-                val newNote = noteEditText.text.toString()
-                // 更新ExpressInfo对象的备注
-                expressList[position] = expressList[position].copy(note = newNote)
-                sortAndRefreshList() // 重新排序列表
-                
-                // 保存更新后的列表之前，过滤掉已删除的项目
-                val deletedItemIds = dataManager.getDeletedItemIds()
-                val filteredExpressList = expressList.filter { !deletedItemIds.contains(it.id) }
-                dataManager.saveExpressInfoList(filteredExpressList)
-                
-                Toast.makeText(this, "备注已更新", Toast.LENGTH_SHORT).show()
-                dialog.dismiss()
+        confirmButton.setOnClickListener {
+            val newNote = noteEditText.text.toString()
+            // 更新ExpressInfo对象的备注
+            expressList[position] = expressList[position].copy(note = newNote)
+            sortAndRefreshList() // 重新排序列表
+            
+            // 保存更新后的列表之前，过滤掉已删除的项目
+            val deletedItemIds = dataManager.getDeletedItemIds()
+            val filteredExpressList = expressList.filter { !deletedItemIds.contains(it.id) }
+            dataManager.saveExpressInfoList(filteredExpressList)
+            
+            Toast.makeText(this, "备注已更新", Toast.LENGTH_SHORT).show()
+            dialog.dismiss()
+        }
+        
+        dialog.setContentView(dialogView)
+        dialog.setCancelable(true)
+        dialog.setCanceledOnTouchOutside(true)
+        
+        // 设置对话框窗口属性
+        val window = dialog.window
+        if (window != null) {
+            val layoutParams = window.attributes
+            layoutParams.width = (resources.displayMetrics.widthPixels * 0.8).toInt() // 宽度为屏幕的80%
+            layoutParams.height = WindowManager.LayoutParams.WRAP_CONTENT
+            window.attributes = layoutParams
+            window.setBackgroundDrawableResource(R.drawable.dialog_rounded_background)
+        }
+        
+        // 确保对话框在当前Activity上下文中正确显示
+        if (!isFinishing) {
+            dialog.show()
+            
+            // 自动弹出软键盘
+            noteEditText.post {
+                val imm = getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
+                imm.showSoftInput(noteEditText, InputMethodManager.SHOW_IMPLICIT)
             }
             
-            dialog.setContentView(dialogView)
-            dialog.setCancelable(true)
-            dialog.setCanceledOnTouchOutside(true)
-            
-            // 设置对话框窗口属性
-            val window = dialog.window
-            if (window != null) {
-                val layoutParams = window.attributes
-                layoutParams.width = (resources.displayMetrics.widthPixels * 0.8).toInt() // 宽度为屏幕的80%
-                layoutParams.height = WindowManager.LayoutParams.WRAP_CONTENT
-                window.attributes = layoutParams
-                window.setBackgroundDrawableResource(R.drawable.dialog_rounded_background)
-            }
-            
-            // 确保对话框在当前Activity上下文中正确显示
-            if (!isFinishing) {
-                dialog.show()
-                
-                // 自动弹出软键盘
-                noteEditText.post {
-                    val imm = getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
-                    imm.showSoftInput(noteEditText, InputMethodManager.SHOW_IMPLICIT)
-                }
-                
-                // 请求焦点
-                noteEditText.requestFocus()
-            }
+            // 请求焦点
+            noteEditText.requestFocus()
         }
     }
     
