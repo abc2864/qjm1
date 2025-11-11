@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="horizontal"
+    android:gravity="center_vertical"
+    android:padding="4dp">
+
+    <!-- 取件码 -->
+    <TextView
+        android:id="@+id/tv_pickup_code"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_weight="1"
+        android:textColor="#E94057"
+        android:textSize="24sp"
+        android:textStyle="bold"
+        android:letterSpacing="0.05"
+        android:text="8-2-3012" />
+
+    <!-- 时间 -->
+    <TextView
+        android:id="@+id/tv_time"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textColor="#999999"
+        android:textSize="10sp"
+        android:layout_marginEnd="8dp"
+        android:text="1小时前" />
+
+    <!-- 备注 -->
+    <TextView
+        android:id="@+id/tv_note"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textColor="#333333"
+        android:textSize="10sp"
+        android:layout_marginEnd="8dp"
+        android:visibility="gone"
+        android:text="备注内容" />
+
+    <!-- 状态按钮 -->
+    <Button
+        android:id="@+id/btn_status"
+        android:layout_width="wrap_content"
+        android:layout_height="32dp"
+        android:text="未取件"
+        android:textSize="10sp"
+        style="?android:attr/buttonBarButtonStyle" />
+
+</LinearLayout>

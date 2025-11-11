@@ -1,0 +1,79 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="horizontal"
+    android:padding="0dp"
+    android:background="@android:color/transparent">
+
+    <LinearLayout
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_weight="1"
+        android:orientation="vertical"
+        android:gravity="start|center_vertical"
+        android:paddingStart="12dp"
+        android:paddingEnd="12dp"
+        android:paddingTop="6dp"
+        android:paddingBottom="6dp"
+        android:minHeight="0dp"
+        android:minWidth="0dp"
+        android:layout_margin="4dp"
+        android:background="@drawable/tag_background">
+
+        <TextView
+            android:id="@+id/rule_name"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textSize="16sp"
+            android:textColor="#333333"
+            android:textAllCaps="false" />
+
+        <TextView
+            android:id="@+id/rule_type"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textSize="12sp"
+            android:textColor="#666666"
+            android:text="[本地]" />
+    </LinearLayout>
+
+    <Switch
+        android:id="@+id/rule_enabled"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="4dp"
+        android:layout_marginStart="4dp"
+        android:layout_gravity="center_vertical" />
+
+    <Button
+        android:id="@+id/rule_view"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="查看"
+        android:textSize="12sp"
+        android:layout_marginEnd="4dp"
+        android:layout_marginStart="4dp"
+        android:layout_gravity="center_vertical"
+        android:visibility="gone" />
+
+    <Button
+        android:id="@+id/rule_edit"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="编辑"
+        android:textSize="12sp"
+        android:layout_marginEnd="4dp"
+        android:layout_marginStart="4dp"
+        android:layout_gravity="center_vertical" />
+
+    <Button
+        android:id="@+id/rule_delete"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="删除"
+        android:textSize="12sp"
+        android:layout_marginEnd="4dp"
+        android:layout_marginStart="4dp"
+        android:layout_gravity="center_vertical" />
+</LinearLayout>

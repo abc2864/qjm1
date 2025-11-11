@@ -1,0 +1,55 @@
+{
+    "version": "2025-10-19 15:30:45",
+    "rules": [
+        {
+            "id": "1",
+            "name": "顺丰速运",
+            "pattern": "顺丰速运.*取件码.*([A-Z0-9]{4,6})",
+            "description": "匹配顺丰速运的取件短信"
+        },
+        {
+            "id": "2",
+            "name": "菜鸟驿站",
+            "pattern": "【菜鸟驿站】.*取件码.*([A-Z0-9]{4,6})",
+            "description": "匹配菜鸟驿站的取件短信"
+        },
+        {
+            "id": "3",
+            "name": "京东物流",
+            "pattern": "京东物流.*验证码.*([A-Z0-9]{4,6})",
+            "description": "匹配京东物流的取件短信"
+        }
+    ],
+    "keywords": [
+        {
+            "id": "1",
+            "keyword": "顺丰速运",
+            "type": "sender",
+            "description": "顺丰速运发件人"
+        },
+        {
+            "id": "2",
+            "keyword": "菜鸟驿站",
+            "type": "sender",
+            "description": "菜鸟驿站发件人"
+        },
+        {
+            "id": "3",
+            "keyword": "京东物流",
+            "type": "sender",
+            "description": "京东物流发件人"
+        },
+        {
+            "id": "4",
+            "keyword": "取件码",
+            "type": "content",
+            "description": "取件码内容关键词"
+        },
+        {
+            "id": "5",
+            "keyword": "验证码",
+            "type": "content",
+            "description": "验证码内容关键词"
+        }
+    ]
+}

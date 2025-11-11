@@ -1,0 +1,168 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>规则诊断工具</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="mobile.css" rel="stylesheet">
+</head>
+<body>
+    <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+        <div class="container">
+            <a class="navbar-brand" href="index.php">取件码规则管理系统</a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <div class="navbar-nav">
+                    <a class="nav-link" href="rules.php">规则管理</a>
+                    <a class="nav-link" href="keywords.php">关键词管理</a>
+                    <a class="nav-link" href="export.php">导出JSON</a>
+                    <a class="nav-link" href="api.php?action=get_rules" target="_blank">API接口</a>
+                    <a class="nav-link" href="api_keys.php">API密钥</a>
+                    <a class="nav-link" href="info.php">系统信息</a>
+                </div>
+                <div class="navbar-nav ms-auto">
+                    <span class="navbar-text me-3 d-none d-lg-inline">欢迎,</span>
+                    <a class="nav-link" href="logout.php">登出</a>
+                </div>
+                <div class="navbar-text d-lg-none user-info-mobile">
+                    欢迎,
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <div class="container mt-4">
+        <h2>规则诊断工具</h2>
+        
+        <div class="card mb-4">
+            <div class="card-header">
+                <h5>数据库规则检查</h5>
+            </div>
+            <div class="card-body">
+                <button class="btn btn-primary" onclick="loadRules()">加载规则</button>
+                <div id="rulesList" class="mt-3"></div>
+            </div>
+        </div>
+        
+        <div class="card">
+            <div class="card-header">
+                <h5>规则测试</h5>
+            </div>
+            <div class="card-body">
+                <div class="mb-3">
+                    <label for="ruleId" class="form-label">选择规则</label>
+                    <select class="form-select" id="ruleId"></select>
+                </div>
+                
+                <div class="mb-3">
+                    <label for="testText" class="form-label">测试文本</label>
+                    <textarea class="form-control" id="testText" rows="3">【菜鸟驿站】取件码:123456到地址:北京市朝阳区某某街道123号，凭123456来取</textarea>
+                </div>
+                
+                <button class="btn btn-success" onclick="testRule()">测试规则</button>
+                
+                <div id="testResult" class="mt-3"></div>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"></script>
+    <script>
+        // 加载规则列表
+        function loadRules() {
+            fetch('api.php?action=get_rules')
+                .then(response => response.json())
+                .then(data => {
+                    const rulesList = document.getElementById('rulesList');
+                    const ruleSelect = document.getElementById('ruleId');
+                    
+                    if (data.success) {
+                        // 显示规则列表
+                        let html = '<div class="table-responsive"><table class="table table-striped">';
+                        html += '<thead><tr><th>ID</th><th>名称</th><th>类型</th><th>规则内容</th><th>状态</th></tr></thead><tbody>';
+                        
+                        ruleSelect.innerHTML = '<option value="">请选择规则</option>';
+                        
+                        data.rules.forEach(rule => {
+                            // 添加到表格
+                            html += '<tr>';
+                            html += '<td>' + rule.id + '</td>';
+                            html += '<td>' + rule.name + '</td>';
+                            html += '<td>' + (rule.rule_type === 'regex' ? '正则' : '自定义') + '</td>';
+                            html += '<td>';
+                            if (rule.rule_type === 'regex') {
+                                html += '<small>' + rule.pattern + '</small>';
+                            } else {
+                                html += '<small>';
+                                html += '取件码: ' + rule.code_prefix + '...' + rule.code_suffix + '<br>';
+                                html += '驿站: ' + rule.station_prefix + '...' + rule.station_suffix + '<br>';
+                                html += '地址: ' + rule.address_prefix + '...' + rule.address_suffix;
+                                html += '</small>';
+                            }
+                            html += '</td>';
+                            html += '<td>' + (rule.is_active === '1' ? '启用' : '禁用') + '</td>';
+                            html += '</tr>';
+                            
+                            // 添加到下拉框
+                            ruleSelect.innerHTML += '<option value="' + rule.id + '">' + rule.name + ' (' + (rule.rule_type === 'regex' ? '正则' : '自定义') + ')</option>';
+                        });
+                        
+                        html += '</tbody></table></div>';
+                        rulesList.innerHTML = html;
+                    } else {
+                        rulesList.innerHTML = '<div class="alert alert-danger">' + data.message + '</div>';
+                    }
+                })
+                .catch(error => {
+                    document.getElementById('rulesList').innerHTML = '<div class="alert alert-danger">加载失败: ' + error.message + '</div>';
+                });
+        }
+        
+        // 测试规则
+        function testRule() {
+            const ruleId = document.getElementById('ruleId').value;
+            const testText = document.getElementById('testText').value;
+            
+            if (!ruleId) {
+                alert('请选择一个规则');
+                return;
+            }
+            
+            if (!testText.trim()) {
+                alert('请输入测试文本');
+                return;
+            }
+            
+            // 发送测试请求
+            fetch('test_rule.php', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/x-www-form-urlencoded',
+                },
+                body: `rule_id=${encodeURIComponent(ruleId)}&input_text=${encodeURIComponent(testText)}`
+            })
+            .then(response => response.json())
+            .then(data => {
+                const resultDiv = document.getElementById('testResult');
+                
+                if (data.success) {
+                    resultDiv.innerHTML = '<div class="alert alert-success"><pre>' + JSON.stringify(data.result, null, 2) + '</pre></div>';
+                } else {
+                    resultDiv.innerHTML = '<div class="alert alert-danger">测试失败: ' + data.message + '</div>';
+                }
+            })
+            .catch(error => {
+                document.getElementById('testResult').innerHTML = '<div class="alert alert-danger">测试失败: ' + error.message + '</div>';
+            });
+        }
+        
+        // 页面加载时自动加载规则
+        window.onload = function() {
+            loadRules();
+        };
+    </script>
+</body>
+</html>

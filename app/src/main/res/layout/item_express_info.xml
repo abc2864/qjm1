@@ -1,0 +1,141 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/item_background"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical"
+    android:gravity="center"
+    android:padding="3dp">
+
+    <!-- 驿站名称 -->
+    <TextView
+        android:id="@+id/tv_station_name"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textColor="@android:color/black"
+        android:textSize="16sp"
+        android:textStyle="bold"
+        android:gravity="center"
+        android:text="菜鸟驿站 · 幸福里店" />
+
+    <!-- 地址 -->
+    <TextView
+        android:id="@+id/tv_address"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textColor="#666666"
+        android:textSize="12sp"
+        android:layout_marginTop="1dp"
+        android:gravity="center"
+        android:text="幸福里小区东门5号楼底商" />
+
+    <!-- 取件码和信息区域 -->
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="1dp">
+
+        <!-- 右侧信息区域（上下两排） -->
+        <LinearLayout
+            android:id="@+id/right_info_layout"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:layout_alignParentEnd="true"
+            android:layout_centerVertical="true"
+            android:gravity="end">
+
+            <!-- 备注显示区域 -->
+            <TextView
+                android:id="@+id/tv_note"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textColor="#333333"
+                android:textSize="12sp"
+                android:gravity="end"
+                android:visibility="gone"
+                android:text="备注内容" />
+
+            <!-- 时间显示 -->
+            <TextView
+                android:id="@+id/tv_time"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:gravity="end"
+                android:text="1小时前"
+                android:textColor="#999999"
+                android:textSize="10sp" />
+
+        </LinearLayout>
+
+        <!-- 多取件码布局 -->
+        <LinearLayout
+            android:id="@+id/multiple_codes_layout"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerInParent="true"
+            android:orientation="vertical"
+            android:visibility="gone"
+            android:gravity="center" />
+
+        <!-- 取件码 -->
+        <TextView
+            android:id="@+id/tv_pickup_code"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerInParent="true"
+            android:textColor="#E94057"
+            android:textSize="32sp"
+            android:textStyle="bold"
+            android:letterSpacing="0.05"
+            android:gravity="center"
+            android:text="8-2-3012" />
+
+    </RelativeLayout>
+
+    <!-- 按钮容器 -->
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:layout_marginTop="1dp"
+        android:layout_marginBottom="1dp"
+        android:gravity="center">
+
+        <!-- 原始短信按钮 -->
+        <Button
+            android:id="@+id/btn_original_sms"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:layout_marginEnd="2dp"
+            android:text="原始短信"
+            android:textSize="12sp"
+            style="?android:attr/buttonBarButtonStyle" />
+
+        <!-- 备注按钮 -->
+        <Button
+            android:id="@+id/btn_note"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:layout_marginStart="2dp"
+            android:layout_marginEnd="2dp"
+            android:text="备注"
+            android:textSize="12sp"
+            style="?android:attr/buttonBarButtonStyle" />
+
+        <!-- 删除按钮 -->
+        <Button
+            android:id="@+id/btn_delete"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:layout_marginStart="2dp"
+            android:text="删除"
+            android:textSize="12sp"
+            style="?android:attr/buttonBarButtonStyle" />
+
+    </LinearLayout>
+
+</LinearLayout>

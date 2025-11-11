@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <item name="delete_button_rect" type="id" />
+    <item name="delete_position" type="id" />
+    <item name="original_sms_button_rect" type="id" />
+    <item name="note_button_rect" type="id" />
+    <item name="button_area_rect" type="id" />
+    <item name="swiped_position" type="id" />
+</resources>
