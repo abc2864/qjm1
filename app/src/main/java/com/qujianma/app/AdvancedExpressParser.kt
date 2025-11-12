@@ -1,6 +1,5 @@
 package com.qujianma.app
 
-import android.content.Context
 import java.util.regex.Pattern
 
 /**
@@ -11,26 +10,20 @@ object AdvancedExpressParser {
     /**
      * 高级解析方法，尝试多种策略解析短信
      */
-    fun parse(smsContent: String, timestamp: Long, context: Context): ExpressInfo? {
-        // 1. 尝试使用现有的解析器
-        var result = ExpressParser.parse(smsContent, timestamp, context)
+    fun parse(smsContent: String, timestamp: Long): ExpressInfo? {
+        // 1. 尝试使用现有的解析器（ExpressParser的简化版本）
+        var result = parseSpecialFormats(smsContent, timestamp)
         if (result != null) {
             return result
         }
         
-        // 2. 尝试使用特殊格式解析器
-        result = parseSpecialFormats(smsContent, timestamp)
-        if (result != null) {
-            return result
-        }
-        
-        // 3. 尝试使用通用模式解析器
+        // 2. 尝试使用通用模式解析器
         result = parseWithUniversalPatterns(smsContent, timestamp)
         if (result != null) {
             return result
         }
         
-        // 4. 尝试使用关键词增强解析器
+        // 3. 尝试使用关键词增强解析器
         result = parseWithKeywordEnhancement(smsContent, timestamp)
         if (result != null) {
             return result
