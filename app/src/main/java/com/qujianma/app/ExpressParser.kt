@@ -776,7 +776,7 @@ class ExpressParser {
             // 必须至少提取到一个有效的取件码和驿站名称
             if (pickupCodesAny == null || stationName == null) {
                 // 如果标准解析器无法解析，尝试使用高级解析器
-                return parseWithAdvancedExtractor(smsContent, timestamp)
+                return AdvancedExpressParser.parse(smsContent, timestamp, android.app.Application())
             }
             
             // 转换取件码列表
@@ -787,14 +787,14 @@ class ExpressParser {
             
             if (pickupCodes.isEmpty()) {
                 // 如果标准解析器无法解析，尝试使用高级解析器
-                return parseWithAdvancedExtractor(smsContent, timestamp)
+                return AdvancedExpressParser.parse(smsContent, timestamp, android.app.Application())
             }
             
             // 验证至少有一个取件码是有效的
             val validPickupCodes = pickupCodes.filter { isValidPickupCode(it, smsContent) }
             if (validPickupCodes.isEmpty()) {
                 // 如果标准解析器无法解析，尝试使用高级解析器
-                return parseWithAdvancedExtractor(smsContent, timestamp)
+                return AdvancedExpressParser.parse(smsContent, timestamp, android.app.Application())
             }
             
             return ExpressInfo(
