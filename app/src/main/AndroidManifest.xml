@@ -45,6 +45,10 @@
             android:name=".NetworkDiagnosisActivity"
             android:exported="false"
             android:theme="@style/Theme.MyApplication" />
+        <activity
+            android:name=".SMSDebugActivity"
+            android:exported="false"
+            android:theme="@style/Theme.MyApplication" />
 
         <receiver
             android:name=".SmsReceiver"

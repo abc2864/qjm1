@@ -65,6 +65,7 @@ class SettingsActivity : AppCompatActivity() {
         updateFromServerButton = findViewById(R.id.btn_update_from_server)
         saveApiKeyButton = findViewById(R.id.btn_save_api_key)
         val networkDiagnosisButton = findViewById<Button>(R.id.btn_network_diagnosis)
+        val smsDebugButton = findViewById<Button>(R.id.btn_sms_debug)
         
         addRuleButton.setOnClickListener {
             val intent = Intent(this, RuleEditActivity::class.java)
@@ -95,8 +96,13 @@ class SettingsActivity : AppCompatActivity() {
             val intent = Intent(this, NetworkDiagnosisActivity::class.java)
             startActivity(intent)
         }
+        
+        smsDebugButton.setOnClickListener {
+            val intent = Intent(this, SMSDebugActivity::class.java)
+            startActivity(intent)
+        }
     }
-    
+
     private fun showSaveApiKeyDialog() {
         val dialogView = LayoutInflater.from(this).inflate(R.layout.dialog_add_express, null)
         val apiKeyInput = EditText(this)
