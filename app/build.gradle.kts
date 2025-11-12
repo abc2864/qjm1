@@ -45,8 +45,6 @@ android {
         ignoreWarnings = true
         // 即使创建了基线文件也继续构建
         checkReleaseBuilds = false
-        // 当创建基线文件时继续构建
-        continueOnFailure = true
     }
 }
 
