@@ -65,8 +65,8 @@ object ParcelInfoRegex {
         "([A-Za-z]{1,2}-\\d{1,6})|" +
         // 格式4: 字母+数字（无短横线）
         "([A-Za-z]{1,2}\\d{3,8})|" +
-        // 格式5: 纯数字（4-8位），但排除手机号等过长数字
-        "(\\d{4,8})" +
+        // 格式5: 纯数字（3-8位），但排除手机号等过长数字
+        "(\\d{3,8})" +
         ")" +                               // 结束分组
         "(?!\\d)"                           // 负向前查找，确保后面不是数字
     )
@@ -503,7 +503,7 @@ fun isValidPickupCode(code: String, smsContent: String = ""): Boolean {
             return false
         }
         // 排除太短的纯数字（如130）
-        if (code.length < 4) {
+        if (code.length < 3) {
             return false
         }
         // 排除太长的纯数字（如和多号副号中的数字）

@@ -562,7 +562,7 @@ class ExpressParser {
                     return false
                 }
                 // 排除太短的纯数字（如130）
-                if (code.length < 4) {
+                if (code.length < 3) {
                     return false
                 }
                 // 排除太长的纯数字（如和多号副号中的数字）
