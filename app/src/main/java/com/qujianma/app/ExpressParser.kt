@@ -547,19 +547,6 @@ class ExpressParser {
                 }
             }
             
-            // 排除URL中的数字组合
-            val urlPatterns = listOf(
-                Regex("http[s]?://[\\w./?=&]*" + code + "[\\w./?=&]*"),
-                Regex("u\\.cmread\\.com/[\\w]*" + code + "[\\w]*"),
-                Regex("a\\.189\\.cn/[\\w]*" + code + "[\\w]*"),
-                Regex("f\\.10086\\.cn/[\\w/]*#?[\\w]*" + code + "[\\w]*")
-            )
-            for (pattern in urlPatterns) {
-                if (pattern.containsMatchIn(smsContent)) {
-                    return false
-                }
-            }
-            
             // 检查是否全为数字
             val isAllDigits = code.all { it.isDigit() }
             
@@ -598,27 +585,16 @@ class ExpressParser {
                     }
                 }
                 
-                // 特殊处理：检查是否在掩码号码中（如178****7923中的7923）
-                if (smsContent.contains("****") && code.length >= 4) {
-                    // 查找掩码号码模式
-                    val maskedNumberPattern = Regex("\\d+\\*+\\d+")
-                    val maskedNumbers = maskedNumberPattern.findAll(smsContent).map { it.value }.toList()
-                    for (maskedNumber in maskedNumbers) {
-                        if (maskedNumber.contains(code)) {
-                            return false
-                        }
-                    }
-                }
-                
-                // 特殊处理：检查是否在普通号码中（如1787923中的7923）
-                if (!smsContent.contains("****") && code.length >= 4) {
-                    // 查找可能的长数字
-                    val longNumberPattern = Regex("\\d{7,}")
-                    val longNumbers = longNumberPattern.findAll(smsContent).map { it.value }.toList()
-                    for (longNumber in longNumbers) {
-                        if (longNumber != code && longNumber.contains(code)) {
-                            return false
-                        }
+                // 排除URL中的数字组合
+                val urlPatterns = listOf(
+                    Regex("http[s]?://[\\w./?=&]*" + code + "[\\w./?=&]*"),
+                    Regex("u\\.cmread\\.com/[\\w]*" + code + "[\\w]*"),
+                    Regex("a\\.189\\.cn/[\\w]*" + code + "[\\w]*"),
+                    Regex("f\\.10086\\.cn/[\\w/]*#?[\\w]*" + code + "[\\w]*")
+                )
+                for (pattern in urlPatterns) {
+                    if (pattern.containsMatchIn(smsContent)) {
+                        return false
                     }
                 }
             }
@@ -888,10 +864,20 @@ class ExpressParser {
                         
                         // 构建取件码正则表达式
                         if (rule.codePrefix.isNotEmpty() || rule.codeSuffix.isNotEmpty()) {
-                            val codePattern = "${Pattern.quote(rule.codePrefix)}(.*?)${Pattern.quote(rule.codeSuffix)}"
-                            val codeMatcher = Pattern.compile(codePattern).matcher(smsContent)
-                            if (codeMatcher.find()) {
-                                pickupCode = codeMatcher.group(1)?.trim()
+                            // 特殊处理：如果前后缀都为空，尝试直接查找取件码
+                            if (rule.codePrefix.isEmpty() && rule.codeSuffix.isEmpty()) {
+                                // 使用通用取件码正则表达式查找取件码
+                                val codePattern = BuiltInRulesManager.getCodePattern()
+                                val codeMatcher = Pattern.compile(codePattern).matcher(smsContent)
+                                if (codeMatcher.find()) {
+                                    pickupCode = codeMatcher.group(1)?.trim()
+                                }
+                            } else {
+                                val codePattern = "${Pattern.quote(rule.codePrefix)}(.*?)${Pattern.quote(rule.codeSuffix)}"
+                                val codeMatcher = Pattern.compile(codePattern).matcher(smsContent)
+                                if (codeMatcher.find()) {
+                                    pickupCode = codeMatcher.group(1)?.trim()
+                                }
                             }
                         }
 

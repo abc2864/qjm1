@@ -94,7 +94,27 @@ object BuiltInRulesManager {
      * 获取内置的取件码正则表达式规则
      */
     fun getCodePattern(): String {
-        return "(?<!\\d)([A-Z0-9]{1,2}[-]?){1,4}[A-Z0-9]{1,12}(?!\\d)"
+        // 根据网络搜索结果优化取件码正则表达式，支持更多格式：
+        // 1. 字母+数字+数字（带短横线）: A-123-4567, AB-1-23
+        // 2. 纯数字（带短横线，最多三段）: 123-456, 12-3456-78
+        // 3. 字母+数字（带短横线）: A-123456, AB-12
+        // 4. 字母+数字（无短横线）: A123456, AB12345
+        // 5. 纯数字（4-8位）: 12345, 12345678
+        // 6. 支持小写字母格式
+        return "(?<!\\d)" +                        // 负向后查找，确保前面不是数字
+               "(" +                               // 开始分组
+               // 格式1: 字母+数字+数字（带短横线）
+               "([A-Za-z]{1,2}-\\d{1,4}-\\d{1,4})|" + 
+               // 格式2: 纯数字（带短横线，最多三段）
+               "(\\d{1,2}-\\d{3,6}(-\\d{1,4})?)|" +
+               // 格式3: 字母+数字（带短横线）
+               "([A-Za-z]{1,2}-\\d{1,6})|" +
+               // 格式4: 字母+数字（无短横线）
+               "([A-Za-z]{1,2}\\d{3,8})|" +
+               // 格式5: 纯数字（4-8位），但排除手机号等过长数字
+               "(\\d{4,8})" +
+               ")" +                               // 结束分组
+               "(?!\\d)"                           // 负向前查找，确保后面不是数字
     }
     
     /**
@@ -169,6 +189,37 @@ object BuiltInRulesManager {
             codeSuffix = "来",
             addressPrefix = "到",
             addressSuffix = "，"
+        ))
+        
+        // 添加新的通用规则以支持更多格式
+        rules.add(Rule(
+            name = "规则4: 凭xxx到",
+            tagPrefix = "",
+            tagSuffix = "",
+            codePrefix = "凭",
+            codeSuffix = "到",
+            addressPrefix = "",
+            addressSuffix = ""
+        ))
+        
+        rules.add(Rule(
+            name = "规则5: 取货码xxx",
+            tagPrefix = "",
+            tagSuffix = "",
+            codePrefix = "取货码",
+            codeSuffix = "",
+            addressPrefix = "",
+            addressSuffix = ""
+        ))
+        
+        rules.add(Rule(
+            name = "规则6: 取件码xxx",
+            tagPrefix = "",
+            tagSuffix = "",
+            codePrefix = "取件码",
+            codeSuffix = "",
+            addressPrefix = "",
+            addressSuffix = ""
         ))
         
         return rules

@@ -105,8 +105,24 @@ object AdvancedExpressParser {
      * 使用通用模式解析短信
      */
     private fun parseWithUniversalPatterns(smsContent: String, timestamp: Long): ExpressInfo? {
-        // 尝试提取所有可能的取件码
-        val codePattern = Regex("([A-Z0-9]{2,}[\\-]?[A-Z0-9]+)")
+        // 尝试提取所有可能的取件码，使用优化后的正则表达式
+        val codePattern = Regex(
+            "(?<!\\d)" +                        // 负向后查找，确保前面不是数字
+            "(" +                               // 开始分组
+            // 格式1: 字母+数字+数字（带短横线）
+            "([A-Za-z]{1,2}-\\d{1,4}-\\d{1,4})|" + 
+            // 格式2: 纯数字（带短横线，最多三段）
+            "(\\d{1,2}-\\d{3,6}(-\\d{1,4})?)|" +
+            // 格式3: 字母+数字（带短横线）
+            "([A-Za-z]{1,2}-\\d{1,6})|" +
+            // 格式4: 字母+数字（无短横线）
+            "([A-Za-z]{1,2}\\d{3,8})|" +
+            // 格式5: 纯数字（4-8位），但排除手机号等过长数字
+            "(\\d{4,8})" +
+            ")" +                               // 结束分组
+            "(?!\\d)"                           // 负向前查找，确保后面不是数字
+        )
+        
         val codes = codePattern.findAll(smsContent)
             .map { it.value }
             .filter { isValidPickupCode(it, smsContent) }
@@ -138,7 +154,7 @@ object AdvancedExpressParser {
         
         return null
     }
-    
+
     /**
      * 使用关键词增强解析
      */
@@ -161,8 +177,24 @@ object AdvancedExpressParser {
         
         // 如果包含快递关键词，尝试提取信息
         if (hasExpressKeyword) {
-            // 尝试提取取件码
-            val codePattern = Regex("([A-Z0-9]{2,}[\\-]?[A-Z0-9]+)")
+            // 尝试提取取件码，使用优化后的正则表达式
+            val codePattern = Regex(
+                "(?<!\\d)" +                        // 负向后查找，确保前面不是数字
+                "(" +                               // 开始分组
+                // 格式1: 字母+数字+数字（带短横线）
+                "([A-Za-z]{1,2}-\\d{1,4}-\\d{1,4})|" + 
+                // 格式2: 纯数字（带短横线，最多三段）
+                "(\\d{1,2}-\\d{3,6}(-\\d{1,4})?)|" +
+                // 格式3: 字母+数字（带短横线）
+                "([A-Za-z]{1,2}-\\d{1,6})|" +
+                // 格式4: 字母+数字（无短横线）
+                "([A-Za-z]{1,2}\\d{3,8})|" +
+                // 格式5: 纯数字（4-8位），但排除手机号等过长数字
+                "(\\d{4,8})" +
+                ")" +                               // 结束分组
+                "(?!\\d)"                           // 负向前查找，确保后面不是数字
+            )
+            
             val codes = codePattern.findAll(smsContent)
                 .map { it.value }
                 .filter { isValidPickupCode(it, smsContent) }
